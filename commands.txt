@@ -1,0 +1,6 @@
+~/simulation_ws
+    > catkin_make
+
+:run commands
+    > source ~/simulation_ws/devel/setup.bash
+    > roslaunch test my_world.launch --screen
