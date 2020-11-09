@@ -17,6 +17,121 @@
       <uri>model://ground_plane</uri>
     </include>
 
+    <!-- Open part 1 meter -->
+    <include>
+      <pose>-0.5 0 0 0 0 0</pose>
+      <uri>model://wall_1</uri>
+    </include>
+
+    <!-- Round part (half circle) -->
+    <include>
+      <pose>-1 0 0 0 0 0</pose>
+      <uri>model://wall_curve</uri>
+      <name>part0</name>
+    </include>
+    <include>
+      <pose>-0.988 0.157 0 0 0 -0.157</pose>
+      <uri>model://wall_curve</uri>
+      <name>part1</name>
+    </include>
+    <include>
+      <pose>-0.951 0.31 0 0 0 -0.314</pose>
+      <uri>model://wall_curve</uri>
+      <name>part2</name>
+    </include>
+    <include>
+      <pose>-0.891 0.454 0 0 0 -0.471</pose>
+      <uri>model://wall_curve</uri>
+      <name>part3</name>
+    </include>
+    <include>
+      <pose>-0.809 0.588 0 0 0 -0.628</pose>
+      <uri>model://wall_curve</uri>
+      <name>part4</name>
+    </include>
+    <include>
+      <pose>-0.707 0.707 0 0 0 -0.785</pose>
+      <uri>model://wall_curve</uri>
+      <name>part5</name>
+    </include>
+    <include>
+      <pose>-0.588 0.809 0 0 0 -0.942</pose>
+      <uri>model://wall_curve</uri>
+      <name>part6</name>
+    </include>
+    <include>
+      <pose>-0.454 0.891 0 0 0 -1.1</pose>
+      <uri>model://wall_curve</uri>
+      <name>part7</name>
+    </include>
+    <include>
+      <pose>-0.31 0.951 0 0 0 -1.256</pose>
+      <uri>model://wall_curve</uri>
+      <name>part8</name>
+    </include>
+    <include>
+      <pose>-0.157 0.988 0 0 0 -1.413</pose>
+      <uri>model://wall_curve</uri>
+      <name>part9</name>
+    </include>
+
+     <include>
+      <pose>0 1 0 0 0 1.57</pose>
+      <uri>model://wall_curve</uri>
+      <name>part10</name>
+    </include>
+    
+    <include>
+      <pose>0.157 0.988 0 0 0 1.413</pose>
+      <uri>model://wall_curve</uri>
+      <name>part11</name>
+    </include>
+    <include>
+      <pose>0.31 0.951 0 0 0 1.256</pose>
+      <uri>model://wall_curve</uri>
+      <name>part12</name>
+    </include>
+    <include>
+      <pose>0.454 0.891 0 0 0 1.1</pose>
+      <uri>model://wall_curve</uri>
+      <name>part13</name>
+    </include>
+    <include>
+      <pose>0.588 0.809 0 0 0 0.942</pose>
+      <uri>model://wall_curve</uri>
+      <name>part14</name>
+    </include>
+    <include>
+      <pose>0.707 0.707 0 0 0 0.785</pose>
+      <uri>model://wall_curve</uri>
+      <name>part15</name>
+    </include>
+    <include>
+      <pose>0.809 0.588 0 0 0 0.628</pose>
+      <uri>model://wall_curve</uri>
+      <name>part16</name>
+    </include>
+    <include>
+      <pose>0.891 0.454 0 0 0 0.471</pose>
+      <uri>model://wall_curve</uri>
+      <name>part17</name>
+    </include>
+    <include>
+      <pose>0.951 0.31 0 0 0 0.314</pose>
+      <uri>model://wall_curve</uri>
+      <name>part18</name>
+    </include>
+    <include>
+      <pose>0.988 0.157 0 0 0 0.157</pose>
+      <uri>model://wall_curve</uri>
+      <name>part19</name>
+    </include>
+    <include>
+      <pose>1 0 0 0 0 0</pose>
+      <uri>model://wall_curve</uri>
+      <name>part20</name>
+    </include>
+
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
@@ -37,6 +152,7 @@
         </constraints>
       </ode>
     </physics>
+
   </world>
 
 </sdf>
