@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<sdf version="1.5">
+    <model name="wall_1">
+        <static>true</static>
+        <link name="link">
+        <collision name="collision">
+            <geometry>
+                <box>
+                    <!-- default thickness = 0.2  -->
+                    <!-- default width = 1.0  -->
+                    <!-- default height = 2.0  -->
+                    <size>1.0 0.2 2.0</size>
+                </box>
+            </geometry>
+        </collision>
+        <visual name="visual">
+            <cast_shadows>false</cast_shadows>
+            <geometry>
+            <box>
+                <size>1.0 0.2 2.0</size>
+            </box>
+            </geometry>
+            <material>
+                <script>
+                    <uri>model://grey_wall/materials/scripts</uri>
+                    <uri>model://grey_wall/materials/textures</uri>
+                    <name>Gazebo_Grey</name>
+                </script>
+            </material>
+        </visual>
+        </link>
+    </model>
+</sdf>
