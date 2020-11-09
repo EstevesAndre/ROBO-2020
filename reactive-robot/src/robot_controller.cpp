@@ -28,10 +28,36 @@ void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
         }
     }
 
+
     ROS_INFO("min_range: %f, min_angle: %f", min_range, min_angle);
 
     geometry_msgs::Twist res_msg;
-    res_msg.angular.z = min_angle - (PI / 2);
+
+    if(min_range > 0.25)
+    {
+        if((min_angle > 0 && min_angle < 0.5) || (min_angle < 6.3 && min_angle > 5.8))
+        {
+            res_msg.linear.x = 0.1;
+        }
+
+        else
+        {
+            res_msg.angular.z = -0.25;
+        }
+    }
+
+    else
+    {
+        if(min_angle > 1 && min_angle < 2)
+        {
+            res_msg.linear.x = 0.1;
+        }
+        else
+        {
+            res_msg.angular.z = -0.5;
+        }
+    }
+
     vel_pub.publish(res_msg);
 }
 
