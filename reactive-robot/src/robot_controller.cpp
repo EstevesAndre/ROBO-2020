@@ -7,19 +7,29 @@
 #include <cmath>
 
 #define INF std::numeric_limits<float>::max()
-#define PI 2*acos(0.0)
+#define PI (2*acos(0.0))
+
+#define FORWARD_VELOCITY 0.2
+#define ANGULAR_VELOCITY 3
 
 ros::Publisher vel_pub;
+
+float radian_to_degree(float radians) {
+    return radians * 180.0 / PI;
+}
+
+float degree_to_radian(float degrees) {
+    return degrees * PI / 180.0;
+}
 
 void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     float min_range = INF;
     float min_angle = INF;
 
-
     for(int i = 0; i < msg->ranges.size(); ++i)
     {
-        float angle = msg->angle_min + i * msg->angle_increment;
+        float angle = radian_to_degree(msg->angle_min + (i * msg->angle_increment));
 
         if(msg->ranges[i] < min_range)
         {
@@ -28,34 +38,56 @@ void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
         }
     }
 
-
-    ROS_INFO("min_range: %f, min_angle: %f", min_range, min_angle);
+    ROS_INFO("min_range: %f m, min_angle: %f o", min_range, min_angle);
 
     geometry_msgs::Twist res_msg;
 
-    if(min_range > 0.25)
+    if(min_range >= 0.2)
     {
-        if((min_angle > 0 && min_angle < 0.5) || (min_angle < 6.3 && min_angle > 5.8))
+        res_msg.linear.x = FORWARD_VELOCITY;
+
+        if(min_angle > 180)
         {
-            res_msg.linear.x = 0.1;
+            float turn_angle = degree_to_radian(abs(min_angle - 360));
+            res_msg.angular.z = -turn_angle;
         }
 
         else
         {
-            res_msg.angular.z = -0.25;
+            float turn_angle = degree_to_radian(min_angle);
+            res_msg.angular.z = turn_angle;
         }
+    }
+
+    else if(abs(min_angle - 90) <= abs(min_angle - 270))
+    {
+        float turn_angle = degree_to_radian(abs(min_angle - 90));
+        res_msg.linear.x = FORWARD_VELOCITY * cos(turn_angle);
+
+        ROS_INFO("Parede Direita: Angle %f", turn_angle);
+
+        if (min_angle > 90)
+            res_msg.angular.z = ANGULAR_VELOCITY * turn_angle;
+
+        else res_msg.angular.z = ANGULAR_VELOCITY * -turn_angle;
     }
 
     else
     {
-        if(min_angle > 1 && min_angle < 2)
-        {
-            res_msg.linear.x = 0.1;
-        }
-        else
-        {
-            res_msg.angular.z = -0.5;
-        }
+        float turn_angle = degree_to_radian(abs(min_angle - 270));
+        res_msg.linear.x = FORWARD_VELOCITY * cos(turn_angle);
+
+        ROS_INFO("Parede Esquerda: Angle %f", turn_angle);
+
+        if (min_angle > 270)
+            res_msg.angular.z = ANGULAR_VELOCITY * turn_angle;
+
+        else res_msg.angular.z = ANGULAR_VELOCITY * -turn_angle;
+    }
+
+    if (min_range <= 0.15 && (min_angle < 10 || min_angle > 350))
+    {
+        res_msg.linear.x = -FORWARD_VELOCITY;
     }
 
     vel_pub.publish(res_msg);
