@@ -5,4 +5,6 @@
     > source /opt/ros/noetic/setup.bash
     > source ~/catkin_ws/devel/setup.bash
     > export GAZEBO_MODEL_PATH=~/catkin_ws/src/ROBO-2020/reactive-robot/models:{GAZEBO_MODEL_PATH}
+    > catkin_make robot_controller
     > roslaunch reactive-robot reactive-robot.launch
+    > rosrun reactive-robot robot_controller
