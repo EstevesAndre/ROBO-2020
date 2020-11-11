@@ -249,10 +249,10 @@ void new_clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
     else
     {
         float y0 = msg->ranges[270];
-        float x1 = msg->ranges[315] * cos(315);
-        float y1 = msg->ranges[315] * sin(315);
+        float x1 = msg->ranges[315] * cos(45);
+        float y1 = msg->ranges[315] * sin(45);
 
-        res_msg.angular.z = atan2(y1 - D_WALL, x1 + WALL_LEAD - y0);
+        res_msg.angular.z = -atan2(y1 - D_WALL, x1 + WALL_LEAD - y0);
     }
 
     vel_pub.publish(res_msg);
