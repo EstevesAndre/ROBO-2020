@@ -14,9 +14,12 @@
 
 #define FORWARD_VELOCITY 0.3
 #define ANGULAR_VELOCITY 3
+
 #define ANG_VEL_FAR_AWAY 0.4
 #define ANG_VEL_TOO_CLOSE 0.25
-#define NUMBER_IMP_LASERS 100
+
+#define NUMBER_IMP_LASERS 25
+#define MIN_DIST_WALL 0.3
 
 ros::Publisher vel_pub;
 
@@ -34,6 +37,8 @@ void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
     float min_range = INF;
     float min_angle = INF;
     std::vector<std::pair<float, float>> dist_ang;
+    float sum_angle_away = 0;
+    float angles_away = 0;
 
     for(int i = 0; i < msg->ranges.size(); ++i)
     {
@@ -41,6 +46,12 @@ void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
         float angle = radian_to_degree(angle_rad);
 
         dist_ang.push_back(std::make_pair(msg->ranges[i],angle_rad));
+
+        if(msg->ranges[i] > 1)
+        {
+            sum_angle_away += angle;
+            angles_away++;
+        }
 
         if((angle < 180 && msg->ranges[i] < min_range) || (angle >= 180 && msg->ranges[i] <= min_range))
         {
@@ -56,7 +67,7 @@ void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
 
     for(int i = 0; i < NUMBER_IMP_LASERS; ++i)
     {
-        float weight = 1 / pow(dist_ang[i].first,5);
+        float weight = 1 / pow(dist_ang[i].first,2.5);
         x += cos(dist_ang[i].second) * weight;
         y += sin(dist_ang[i].second) * weight;
     }   
@@ -68,10 +79,31 @@ void clbk_laser(const sensor_msgs::LaserScan::ConstPtr& msg)
 
     min_angle = mean;
 
+    if(msg->ranges[0] <= MIN_DIST_WALL)
+    {
+        ROS_INFO("PARAR");
+        res_msg.linear.x = 0;
+
+        float angle_away = sum_angle_away / angles_away;
+
+        if(angle_away < 180)
+        {
+            res_msg.angular.z = 1;
+        }
+
+        else
+        {
+            res_msg.angular.z = -1;
+        }
+        
+        vel_pub.publish(res_msg);
+        return;
+    }
+
     ROS_INFO("min_range: %f m, normal_angle: %f o", min_range, min_angle);
     res_msg.linear.x = FORWARD_VELOCITY;
 
-    if(min_range <= 0.1205)
+    if(min_range <= 0.15)
     {
         ROS_INFO("Perto");
 
@@ -140,7 +172,7 @@ int main(int argc, char **argv)
 
     ros::NodeHandle n;
 
-    vel_pub = n.advertise<geometry_msgs::Twist>("/cmd_vel", 100);
+    vel_pub = n.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
     ros::Subscriber sub_laser = n.subscribe("/scan", 1, clbk_laser);
 
     ros::spin();
