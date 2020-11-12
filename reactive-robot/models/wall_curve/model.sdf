@@ -7,9 +7,9 @@
             <geometry>
                 <box>
                     <!-- default thickness = 0.2  -->
-                    <!-- default width = 1.0  -->
+                    <!-- default width = 0.2  -->
                     <!-- default height = 2.0  -->
-                    <size>0.157 0.2 2.0</size>
+                    <size>0.2 0.2 2.0</size>
                 </box>
             </geometry>
         </collision>
@@ -17,7 +17,7 @@
             <cast_shadows>false</cast_shadows>
             <geometry>
             <box>
-                <size>0.157 0.2 2.0</size>
+                <size>0.2 0.2 2.0</size>
             </box>
             </geometry>
             <material>
